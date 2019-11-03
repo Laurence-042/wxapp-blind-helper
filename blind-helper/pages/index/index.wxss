@@ -1,0 +1,16 @@
+/**index.wxss**/
+
+cover-view {
+  width: 40vh;
+  height: 40vh;
+}
+
+camera {
+  width: 40vh;
+  height: 40vh;
+}
+
+cover-image {
+  width: 40vh;
+  height: 40vh;
+}
