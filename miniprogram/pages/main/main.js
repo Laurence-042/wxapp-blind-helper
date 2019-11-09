@@ -60,6 +60,7 @@ Page({
         }).then(res => {
           res = JSON.parse(res.result.data)
           console.log(res)
+          that.get_audio(res.data.text)
         }).catch(err => {
           console.error(err)
         })
@@ -71,33 +72,38 @@ Page({
   get_audio: function(text) {
     let that = this;
     console.log(text)
-    let data = {
-      app_id: "2123548236",
-      app_key: "WdT3TPY44Vh6wegM",
-      speaker: 1,
-      format: 2,
-      volume: 0,
-      speed: 100,
-      text: text,
-      aht: 0,
-      apc: 58
-    }
-    let url = 'http://localhost:8080/t2a?'
-    for (var key in data) {
-      url = url + key + "=" + data[key] + "&"
-    }
-    url = url.substring(0, url.length - 1)
-    console.log(url)
 
-    let innerAudioContext = wx.createInnerAudioContext()
-    innerAudioContext.autoplay = true
-    innerAudioContext.src = url
-    innerAudioContext.onPlay(() => {
-      console.log('开始播放')
+    wx.cloud.callFunction({
+      name: 'image_to_text',
+      data: {
+        "param": {
+          "app_id": "2123548236",
+          "speaker": "1",
+          "format": "2",
+          "volume": "0",
+          "speed": "100",
+          "text": text,
+          "aht": "0",
+          "apc": "58"
+        },
+        "app_key": "GD9uNRZd3Tl0ccp2"
+      }
+    }).then(res => {
+      res = JSON.parse(res.result.data)
+      console.log(res)
+    }).catch(err => {
+      console.error(err)
     })
-    innerAudioContext.onError((res) => {
-      console.log(res.errMsg)
-      console.log(res.errCode)
-    })
+
+    // let innerAudioContext = wx.createInnerAudioContext()
+    // innerAudioContext.autoplay = true
+    // innerAudioContext.src = url
+    // innerAudioContext.onPlay(() => {
+    //   console.log('开始播放')
+    // })
+    // innerAudioContext.onError((res) => {
+    //   console.log(res.errMsg)
+    //   console.log(res.errCode)
+    // })
   }
 })
