@@ -24,9 +24,7 @@ exports.main = async(event, context) => {
   param["session_id"] = time_in_sec.toString();
 
   let res = await cloud.callFunction({
-    // 要调用的云函数名称
     name: 'get_request_sign',
-    // 传递给云函数的参数
     data: {
       param: param,
       app_key: event.app_key,
