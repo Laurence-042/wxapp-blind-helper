@@ -1,5 +1,4 @@
-/**index.wxss**/
-
+/* miniprogram/pages/main/main.wxss */
 cover-view {
   width: 40vh;
   height: 40vh;

@@ -1,0 +1,64 @@
+/**index.wxss**/
+/* 
+cover-view {
+  width: 40vh;
+  height: 40vh;
+}
+
+camera {
+  width: 40vh;
+  height: 40vh;
+}
+
+cover-image {
+  width: 40vh;
+  height: 40vh;
+} */
+
+.body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+cover-view {
+  /* left: 140rpx; */
+  width: 40vh;
+  height: 40vh;
+}
+
+camera {
+  /* left: 140rpx; */
+  width: 40vh;
+  height: 40vh;
+}
+
+image {
+  /* margin: auto; */
+  width: 40vh;
+  height: 40vh;
+}
+
+.new-btn1{
+  position:absolute;
+  bottom: 100rpx;
+  right: 480rpx;
+  width: 200rpx;
+  height: 80rpx;
+  background:red;
+  /* border-radius: 50%; */
+  font-size: 48rpx;
+  line-height:80rpx;
+}
+
+.new-btn2{
+  position:absolute;
+  bottom: 100rpx;
+  right: 70rpx;
+  width: 200rpx;
+  height: 80rpx;
+  background: green;
+  /* border-radius: 50%; */
+  font-size: 48rpx;
+  line-height:80rpx;
+}

@@ -1,5 +1,4 @@
-//index.js
-
+// miniprogram/pages/main/main.js
 /* 
 Image2Text
 App_ID2123531402
@@ -20,24 +19,11 @@ Page({
   },
 
   onLoad: function() {
-    // this.take_photo(this.get_text)
-
-    // let ac = wx.createInnerAudioContext("myAudio")
-    // ac.src = 'test/t2a.wav'
-    // ac.onPlay(() => {
-    //   console.log('开始播放')
-    // })
-    // ac.onError((res) => {
-    //   console.log(res.errMsg)
-    //   console.log(res.errCode)
-    // })
-    // ac.play()
-
-    // this.get_audio("今天真的是暴雨，气候控制系统又出什么幺蛾子了？")
     let that = this;
-    setInterval(function() {
-      that.take_photo(that.get_text)
-    }, 10000)
+    that.take_photo(that.get_text)
+    // setInterval(function () {
+    //   that.take_photo(that.get_text)
+    // }, 10000)
   },
 
   take_photo: function(call_back) {
@@ -57,26 +43,31 @@ Page({
       img: img_path
     })
 
-    wx.uploadFile({
-      url: 'http://localhost:8080/i2t',
+    wx.getFileSystemManager().readFile({
       filePath: img_path,
-      name: 'image',
-      formData: {
-        app_id: "2123531402",
-        app_key: "GD9uNRZd3Tl0ccp2"
-      },
-      success: (res) => {
-        console.log(res)
-        let data = JSON.parse(res.data).data
-        console.log(data)
-        that.setData({
-          text: data.text
+      encoding: "base64",
+      success: (img_b64) => {
+        img_b64 = img_b64.data
+        wx.cloud.callFunction({
+          name: 'image_to_text',
+          data: {
+            "param": {
+              "app_id": "2123531402",
+              "image": img_b64
+            },
+            "app_key": "GD9uNRZd3Tl0ccp2"
+          }
+        }).then(res => {
+          res = JSON.parse(res.result.data)
+          console.log(res)
+        }).catch(err => {
+          console.error(err)
         })
-        that.get_audio(data.text)
       }
     })
-  },
 
+
+  },
   get_audio: function(text) {
     let that = this;
     console.log(text)
