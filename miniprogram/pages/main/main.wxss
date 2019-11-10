@@ -1,19 +1,4 @@
 /**index.wxss**/
-/* 
-cover-view {
-  width: 40vh;
-  height: 40vh;
-}
-
-camera {
-  width: 40vh;
-  height: 40vh;
-}
-
-cover-image {
-  width: 40vh;
-  height: 40vh;
-} */
 
 .body{
   display: flex;
@@ -22,19 +7,16 @@ cover-image {
 }
 
 cover-view {
-  /* left: 140rpx; */
   width: 40vh;
   height: 40vh;
 }
 
 camera {
-  /* left: 140rpx; */
   width: 40vh;
   height: 40vh;
 }
 
 image {
-  /* margin: auto; */
   width: 40vh;
   height: 40vh;
 }

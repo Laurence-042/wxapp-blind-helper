@@ -11,9 +11,10 @@
   <camera device-position="back" flash="off" binderror="error">
   </camera>
   <image src="{{img}}"></image>
-
 </view>
 
 <button type="primary" bindtap="clickStart" class="new-btn1">开始</button>
 
 <button type="warn" bindtap="clickStop" class="new-btn2">结束</button>
+
+<canvas canvas-id="canvas" style="width:{{cWidth}}px;height:{{cHeight}}px;position: absolute;left:-1000px;top:-1000px;"></canvas>
