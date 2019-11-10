@@ -16,6 +16,7 @@ async def index(request):
 
 @routes.post('/i2t')
 async def img_to_text(request):
+    print("Get i2t request")
     data = await request.post()
     image = data['image'].file.read()
     # with open("test", "wb") as f:
@@ -40,6 +41,7 @@ async def img_to_text(request):
 
 @routes.get('/t2a')
 async def text_to_audio(request):
+    print("Get t2a request")
     upper_req_params = parse_query_str_to_dict(request.query_string)
 
     time_stamp = str(int(time.time()))

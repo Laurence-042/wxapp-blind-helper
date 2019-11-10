@@ -16,28 +16,12 @@ const app = getApp()
 Page({
   data: {
     img: "img/default.jpg",
-    text: ""
+    text: "",
+    interval: null
   },
 
   onLoad: function() {
-    // this.take_photo(this.get_text)
 
-    // let ac = wx.createInnerAudioContext("myAudio")
-    // ac.src = 'test/t2a.wav'
-    // ac.onPlay(() => {
-    //   console.log('开始播放')
-    // })
-    // ac.onError((res) => {
-    //   console.log(res.errMsg)
-    //   console.log(res.errCode)
-    // })
-    // ac.play()
-
-    // this.get_audio("今天真的是暴雨，气候控制系统又出什么幺蛾子了？")
-    let that = this;
-    setInterval(function() {
-      that.take_photo(that.get_text)
-    }, 10000)
   },
 
   take_photo: function(call_back) {
@@ -56,9 +40,9 @@ Page({
     this.setData({
       img: img_path
     })
-
+    console.log(app.globalData.server_url + 'i2t')
     wx.uploadFile({
-      url: 'http://localhost:8080/i2t',
+      url: app.globalData.server_url+'i2t',
       filePath: img_path,
       name: 'image',
       formData: {
@@ -91,7 +75,8 @@ Page({
       aht: 0,
       apc: 58
     }
-    let url = 'http://localhost:8080/t2a?'
+    
+    let url = app.globalData.server_url +'t2a?'
     for (var key in data) {
       url = url + key + "=" + data[key] + "&"
     }
@@ -107,6 +92,39 @@ Page({
     innerAudioContext.onError((res) => {
       console.log(res.errMsg)
       console.log(res.errCode)
+    })
+  },
+
+  clickStart() {
+    console.log('strat')
+   
+    let that = this;
+    that.take_photo(that.get_text)
+    let interval = setInterval(function() {
+      that.take_photo(that.get_text)
+    }, 10000)
+    this.setData({
+      interval: interval
+    })
+
+    wx.showToast({
+      title: '程序开始！', // 标题
+      icon: 'success', // 图标类型，默认success
+      duration: 1500 // 提示窗停留时间，默认1500ms
+    })
+  },
+
+  clickStop() {
+    console.log('end')
+    clearInterval(this.data.interval)
+    this.setData({
+      interval: null
+    })
+
+    wx.showToast({
+      title: '程序结束！', // 标题
+      icon: 'success', // 图标类型，默认success
+      duration: 1500 // 提示窗停留时间，默认1500ms
     })
   }
 })

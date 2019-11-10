@@ -34,6 +34,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    server_url: "https://www.laurence042.com:9043/"
   }
 })
