@@ -16,7 +16,10 @@ Page({
   data: {
     img: "img/default.jpg",
     text: "",
-    audio_file_status: true,
+    camera_status:2,
+    i2t_system_status:2,
+    t2a_system_status: 2,
+    audio_file_code: 0,
     cWidth: 0,
     cHeight: 0
   },
@@ -31,12 +34,19 @@ Page({
 
   take_photo: function(call_back) {
     let that = this;
+    that.setData({
+      camera_status:2,
+      i2t_system_status:2,
+      t2a_system_status:2
+    })
     let cam = wx.createCameraContext();
     cam.takePhoto({
       quality: 'low',
       success: (photo) => {
+        that.setData({
+          camera_status: 1
+        })
         let tempImagePath = photo.tempImagePath
-        console.log(tempImagePath)
         //-----返回选定照片的本地文件路径列表，获取照片信息-----------
         wx.getImageInfo({
           src: tempImagePath,
@@ -64,8 +74,7 @@ Page({
                 destWidth: canvasWidth,
                 destHeight: canvasHeight,
                 success: function(res) {
-                  console.log(res.tempFilePath) //最终图片路径
-                  call_back(res.tempFilePath)
+                  call_back(res.tempFilePath)//最终图片路径
                 },
                 fail: function(res) {
                   console.log(res.errMsg)
@@ -77,6 +86,12 @@ Page({
             console.log(res.errMsg)
           },
         })
+      },
+      fail:(res)=>{
+        that.setData({
+          camera_status:0
+        })
+        return
       }
     });
   },
@@ -104,7 +119,17 @@ Page({
           }
         }).then(res => {
           res = JSON.parse(res.result.data)
-          console.log(res)
+          if (res.ret != 0) {
+            console.log("image-to-text system busy")
+            that.setData({
+              i2t_system_status: 0
+            })
+            console.log(res)
+            return
+          }
+          that.setData({
+            i2t_system_status: 1
+          })
           let tag_list = res.data.tag_list
           // 根据可靠度从高到低排列标签
           tag_list.sort(function(a, b) {
@@ -118,8 +143,8 @@ Page({
           let str = tag_list.slice(0, -1).join('，')
           // 如果字符串不为空，在后面加上”和“作为和最后那个没被取出的标签之间的连接
           // 如果字符串为空,说明总共只有一个标签，直接拼上最后那个没被取出的标签
-          if(str.length>0){
-            str = str + "和" 
+          if (str.length > 0) {
+            str = str + "和"
           }
           str = "我想您面前的是" + str + tag_list[tag_list.length - 1]
           that.get_audio(str)
@@ -132,7 +157,6 @@ Page({
 
   get_text: function(img_path) {
     let that = this;
-    console.log(img_path)
     this.setData({
       img: img_path
     })
@@ -153,7 +177,17 @@ Page({
           }
         }).then(res => {
           res = JSON.parse(res.result.data)
-          console.log(res)
+          if (res.ret != 0) {
+            console.log("image-to-text system busy")
+            that.setData({
+              i2t_system_status: 0
+            })
+            console.log(res)
+            return
+          }
+          that.setData({
+            i2t_system_status: 1
+          })
           that.get_audio(res.data.text)
         }).catch(err => {
           console.error(err)
@@ -163,19 +197,10 @@ Page({
   },
   get_audio: function(text) {
     let that = this;
-    let tmp_path_0 = wx.env.USER_DATA_PATH + '/tmp_0.wav'
-    let tmp_path_1 = wx.env.USER_DATA_PATH + '/tmp_1.wav'
-
-    wx.getFileSystemManager().removeSavedFile({
-      filePath: that.data.audio_file_status ? tmp_path_0: tmp_path_1,
-      success: (e) => {
-        console.log(e)
-      },
-      fail: (errMsg) => {
-        console.log(errMsg)
-      }
+    let tmp_path = wx.env.USER_DATA_PATH + '/' + that.data.audio_file_code + '.wav'
+    that.setData({
+      audio_file_code: that.data.audio_file_code + 1
     })
-    let tmp_path = that.data.audio_file_status ? tmp_path_1 : tmp_path_0
     console.log(text)
     if (text == "") {
       text = "AF可能缺少淡水"
@@ -197,16 +222,23 @@ Page({
         "app_key": "WdT3TPY44Vh6wegM"
       }
     }).then(res => {
-      //res = JSON.parse(res.result.data)
-      console.log(res)
-      console.log(res.result.data)
       res = res.result.data
+      if (res.ret != 0) {
+        console.log("text-to-audio system busy")
+        that.setData({
+          t2a_system_status: 0
+        })
+        console.log(res)
+        return
+      }
+      that.setData({
+        t2a_system_status: 1
+      })
       wx.getFileSystemManager().writeFile({
         filePath: tmp_path,
         data: res.data.speech,
         encoding: 'base64',
         success: (e) => {
-          console.log(e)
           that.setData({
             audio_file_status: !that.data.audio_file_status
           })
@@ -222,7 +254,7 @@ Page({
   },
 
   play_audio: function(path) {
-    if(this.data.interval==null){
+    if (this.data.interval == null) {
       return
     }
     let innerAudioContext = wx.createInnerAudioContext()
@@ -240,7 +272,7 @@ Page({
     console.log('strat')
 
     let that = this;
-    that.take_photo(that.get_tags)
+    that.take_photo(that.get_text)
     let interval = setInterval(function() {
       that.take_photo(that.get_tags)
     }, 10000)
