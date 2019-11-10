@@ -21,16 +21,18 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
 
   let param = event.param
+  let app_key = event.app_key
   console.log(param)
   let time_in_sec = Math.floor(new Date().getTime() / 1000)
   param["time_stamp"] = time_in_sec.toString();
   param["nonce_str"] = Math.random().toString(36).slice(-8)
+  console.log(param)
 
   let res = await cloud.callFunction({
     name: 'get_request_sign',
     data: {
       param: param,
-      app_key: event.app_key,
+      app_key: app_key
     }
   })
   param["sign"] = res.result.sign
@@ -42,12 +44,16 @@ exports.main = async (event, context) => {
     qs: param
   })
   console.log(res)
+  res = JSON.parse(res)
+  let audio = res.data.speech
+  audio = new Buffer(audio, 'base64').toString()
 
   return {
     event,
     openid: wxContext.OPENID,
     appid: wxContext.APPID,
     unionid: wxContext.UNIONID,
-    data: res
+    data: res,
+    audio:audio
   }
 }
