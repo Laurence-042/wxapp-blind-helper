@@ -18,8 +18,8 @@ async def index(request):
 async def img_to_text(request):
     data = await request.post()
     image = data['image'].file.read()
-    with open("test", "wb") as f:
-        f.write(image)
+    # with open("test", "wb") as f:
+    #     f.write(image)
     image = base64.b64encode(image)
     app_id = data['app_id']
     app_key = data['app_key']
@@ -44,7 +44,7 @@ async def text_to_audio(request):
 
     time_stamp = str(int(time.time()))
     upper_req_params["time_stamp"] = time_stamp
-    upper_req_params["nonce_str"] =  get_rand_str(12)
+    upper_req_params["nonce_str"] = get_rand_str(12)
 
     app_key = upper_req_params["app_key"]
     del upper_req_params["app_key"]
@@ -55,8 +55,8 @@ async def text_to_audio(request):
     print(res)
 
     audio_file = base64.b64decode(res["data"]["speech"])
-    file_path = "../audio/"+time_stamp+".wav"
-    with open(file_path,'wb') as f:
+    file_path = "../audio/" + time_stamp + ".wav"
+    with open(file_path, 'wb') as f:
         f.write(audio_file)
-    #text=mp3_file,content_type="audio/wav"
+    # text=mp3_file,content_type="audio/wav"
     return web.FileResponse(path=file_path)

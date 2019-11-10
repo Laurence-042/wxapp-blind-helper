@@ -1,0 +1,7 @@
+<!--index.wxml-->
+<view class="body">
+  <camera device-position="back" flash="off" binderror="error">
+    <cover-view><cover-image src="{{img}}"></cover-image></cover-view>
+  </camera>
+  <view><text>{{text}}</text></view>
+</view>

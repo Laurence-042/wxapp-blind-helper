@@ -23,6 +23,8 @@ def get_request_sign(param, app_key):
     request_str = '&'.join(sorted_param_strs)
     request_str = request_str.encode("UTF8")
 
+    print(request_str)
+
     # MD5运算 + 转换大写，得到请求签名
     m = hashlib.md5()
     m.update(request_str)

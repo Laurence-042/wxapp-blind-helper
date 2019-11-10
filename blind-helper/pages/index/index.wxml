@@ -1,7 +1,19 @@
 <!--index.wxml-->
-<view class="body">
+<!-- <view class="body">
   <camera device-position="back" flash="off" binderror="error">
     <cover-view><cover-image src="{{img}}"></cover-image></cover-view>
   </camera>
   <view><text>{{text}}</text></view>
+</view> -->
+
+
+<view class="body">
+  <camera device-position="back" flash="off" binderror="error">
+  </camera>
+  <image src="{{img}}"></image>
+
 </view>
+
+<button type="primary" bindtap="clickStart" class="new-btn1">开始</button>
+
+<button type="warn" bindtap="clickStop" class="new-btn2">结束</button>
