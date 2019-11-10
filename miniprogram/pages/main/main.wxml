@@ -1,17 +1,36 @@
 <!--index.wxml-->
-<!-- <view class="body">
-  <camera device-position="back" flash="off" binderror="error">
-    <cover-view><cover-image src="{{img}}"></cover-image></cover-view>
-  </camera>
-  <view><text>{{text}}</text></view>
-</view> -->
-
-
 <view class="body">
+  <camera device-position="back" flash="off" binderror="error">
+    <cover-view>
+      <cover-image src="{{img}}"></cover-image>
+    </cover-view>
+  </camera>
+  <view>
+    camera_status:
+    <text wx:if="{{camera_status==1}}" style="color:green">OK</text>
+    <text wx:elif="{{camera_status==2}}" style="color:#66ccff">waiting</text>
+    <text wx:else style="color:red">out of line</text>
+  </view>
+  <view>
+    image-to-text status:
+    <text wx:if="{{i2t_system_status==1}}" style="color:green">OK</text>
+    <text wx:elif="{{i2t_system_status==2}}" style="color:#66ccff">waiting</text>
+    <text wx:else style="color:red">out of line</text>
+  </view>
+  <view>
+    text-to-audio status:
+    <text wx:if="{{t2a_system_status==1}}" style="color:green">OK</text>
+    <text wx:elif="{{t2a_system_status==2}}" style="color:#66ccff">waiting</text>
+    <text wx:else style="color:red">out of line</text>
+  </view>
+</view>
+
+
+<!-- <view class="body">
   <camera device-position="back" flash="off" binderror="error">
   </camera>
   <image src="{{img}}"></image>
-</view>
+</view> -->
 
 <button type="primary" bindtap="clickStart" class="new-btn1">开始</button>
 
