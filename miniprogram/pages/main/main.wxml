@@ -23,6 +23,20 @@
     <text wx:elif="{{t2a_system_status==2}}" style="color:#66ccff">waiting</text>
     <text wx:else style="color:red">out of line</text>
   </view>
+<view class="section">
+  <picker bindchange="bindI2tPickerChange" value="{{i2t_api_index}}" range="{{i2t_api_conf}}">
+    <view class="picker">
+      当前使用的识图接口：{{i2t_api_conf[i2t_api_index]}}
+    </view>
+  </picker>
+</view>
+<view class="section">
+  <picker bindchange="bindT2aPickerChange" value="{{t2a_api_index}}" range="{{t2a_api_conf}}">
+    <view class="picker">
+      当前使用的语音合成接口：{{t2a_api_conf[t2a_api_index]}}
+    </view>
+  </picker>
+</view>
 </view>
 
 

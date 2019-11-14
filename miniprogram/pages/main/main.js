@@ -14,17 +14,36 @@ const app = getApp()
 
 Page({
   data: {
+    i2t_method: null,
+    t2a_method: null,
+
+    i2t_api_index: 0,
+    t2a_api_index: 0,
+    i2t_api_conf: [
+      "看图说话", "多标签识别"
+    ],
+    t2a_api_conf: [
+      "语音合成"
+    ],
+
     img: "img/default.jpg",
     text: "",
-    camera_status:2,
-    i2t_system_status:2,
+
+    camera_status: 2,
+    i2t_system_status: 2,
     t2a_system_status: 2,
     audio_file_code: 0,
+
     cWidth: 0,
     cHeight: 0
   },
 
   onLoad: function() {
+    let that = this;
+    this.setData({
+      i2t_method: that.get_tags,
+      t2a_method: that.t2a_method
+    })
     // let that = this;
     // that.take_photo(that.get_tags)
     // setInterval(function () {
@@ -32,12 +51,12 @@ Page({
     // }, 3000)
   },
 
-  take_photo: function(call_back) {
+  proceed: function() {
     let that = this;
     that.setData({
-      camera_status:2,
-      i2t_system_status:2,
-      t2a_system_status:2
+      camera_status: 2,
+      i2t_system_status: 2,
+      t2a_system_status: 2
     })
     let cam = wx.createCameraContext();
     cam.takePhoto({
@@ -74,7 +93,7 @@ Page({
                 destWidth: canvasWidth,
                 destHeight: canvasHeight,
                 success: function(res) {
-                  call_back(res.tempFilePath)//最终图片路径
+                  that.i2t_method(res.tempFilePath) //最终图片路径
                 },
                 fail: function(res) {
                   console.log(res.errMsg)
@@ -87,16 +106,29 @@ Page({
           },
         })
       },
-      fail:(res)=>{
+      fail: (res) => {
         that.setData({
-          camera_status:0
+          camera_status: 0
         })
         return
       }
     });
   },
 
-  get_tags: function(img_path) {
+  i2t_method: function (img_path){
+    switch (this.data.i2t_api_index) {
+      case 0:
+        this.i2t_api_text(img_path)
+        break;
+      case 1:
+        this.i2t_api_tags(img_path)
+        break;
+      default:
+        console.log(this.data.i2t_api_index)
+    }
+  },
+
+  i2t_api_tags: function(img_path) {
     let that = this;
     this.setData({
       img: img_path
@@ -127,6 +159,7 @@ Page({
             console.log(res)
             return
           }
+          console.log("image-to-text system ok")
           that.setData({
             i2t_system_status: 1
           })
@@ -147,7 +180,7 @@ Page({
             str = str + "和"
           }
           str = "我想您面前的是" + str + tag_list[tag_list.length - 1]
-          that.get_audio(str)
+          that.t2a_method(str)
         }).catch(err => {
           console.error(err)
         })
@@ -155,7 +188,7 @@ Page({
     })
   },
 
-  get_text: function(img_path) {
+  i2t_api_text: function(img_path) {
     let that = this;
     this.setData({
       img: img_path
@@ -185,17 +218,27 @@ Page({
             console.log(res)
             return
           }
+          console.log("image-to-text system ok")
           that.setData({
             i2t_system_status: 1
           })
-          that.get_audio(res.data.text)
+          that.t2a_method("我想您面前的是" + res.data.text)
         }).catch(err => {
           console.error(err)
         })
       }
     })
   },
-  get_audio: function(text) {
+  t2a_method: function(text) {
+    switch (this.data.t2a_api_index) {
+      case 0:
+        this.t2a_api_default(text)
+        break;
+      default:
+        console.log(this.data.t2a_api_index)
+    }
+  },
+  t2a_api_default: function(text) {
     let that = this;
     let tmp_path = wx.env.USER_DATA_PATH + '/' + that.data.audio_file_code + '.wav'
     that.setData({
@@ -231,6 +274,7 @@ Page({
         console.log(res)
         return
       }
+      console.log("text-to-audio system ok")
       that.setData({
         t2a_system_status: 1
       })
@@ -272,9 +316,9 @@ Page({
     console.log('strat')
 
     let that = this;
-    that.take_photo(that.get_text)
+    that.proceed();
     let interval = setInterval(function() {
-      that.take_photo(that.get_tags)
+      that.proceed()
     }, 10000)
     this.setData({
       interval: interval
@@ -299,5 +343,19 @@ Page({
       icon: 'success', // 图标类型，默认success
       duration: 1500 // 提示窗停留时间，默认1500ms
     })
+  },
+
+  bindI2tPickerChange: function(e) {
+    this.setData({
+      i2t_api_index: parseInt(e.detail.value),
+    })
+    console.log('set i2t api to ', this.data.i2t_api_conf[e.detail.value])
+  },
+  bindT2aPickerChange: function(e) {
+
+    this.setData({
+      t2a_api_index: parseInt(e.detail.value),
+    })
+    console.log('set t2a api to ', this.data.t2a_api_conf[e.detail.value])
   }
 })
