@@ -14,9 +14,6 @@ const app = getApp()
 
 Page({
   data: {
-    i2t_method: null,
-    t2a_method: null,
-
     i2t_api_index: 0,
     t2a_api_index: 0,
     i2t_api_conf: [
@@ -39,11 +36,6 @@ Page({
   },
 
   onLoad: function() {
-    let that = this;
-    this.setData({
-      i2t_method: that.get_tags,
-      t2a_method: that.t2a_method
-    })
     // let that = this;
     // that.take_photo(that.get_tags)
     // setInterval(function () {
@@ -180,6 +172,9 @@ Page({
             str = str + "和"
           }
           str = "我想您面前的是" + str + tag_list[tag_list.length - 1]
+          that.setData({
+            text:str
+          })
           that.t2a_method(str)
         }).catch(err => {
           console.error(err)
@@ -222,7 +217,11 @@ Page({
           that.setData({
             i2t_system_status: 1
           })
-          that.t2a_method("我想您面前的是" + res.data.text)
+          let str = "我想您面前的是" + res.data.text
+          that.setData({
+            text: str
+          })
+          that.t2a_method(str)
         }).catch(err => {
           console.error(err)
         })
