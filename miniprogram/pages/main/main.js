@@ -24,7 +24,7 @@ Page({
     ],
 
     img: "img/default.jpg",
-    text: "",
+    text: "程序未启动",
 
     camera_status: 2,
     i2t_system_status: 2,

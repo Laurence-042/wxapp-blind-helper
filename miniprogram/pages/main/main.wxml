@@ -2,52 +2,61 @@
 <view class="body">
   <camera device-position="back" flash="off" binderror="error">
     <cover-view>
-      <cover-image src="{{img}}"></cover-image>
+      <cover-image src="{{img}}" mode="aspectFill"></cover-image>
     </cover-view>
   </camera>
-  <view class="status">
-      <text>camera: </text>
-      <text wx:if="{{camera_status==1}}" style="color:green">OK</text>
-      <text wx:elif="{{camera_status==2}}" style="color:#66ccff">waiting</text>
-      <text wx:else style="color:red">fail</text>
+  <view class="table-view">
+    <view class="col-2 api-status">
+      <view>
+        <text style="text-align: left">===运行信息===</text>
+      </view>
+      <view>
+        <text>相机状态: </text>
+        <text wx:if="{{camera_status==1}}" style="color:green">OK</text>
+        <text wx:elif="{{camera_status==2}}" style="color:#66ccff">waiting</text>
+        <text wx:else style="color:red">fail</text>
+      </view>
+      <view>
+        <text>识图状态: </text>
+        <text wx:if="{{i2t_system_status==1}}" style="color:green">OK</text>
+        <text wx:elif="{{i2t_system_status==2}}" style="color:#66ccff">waiting</text>
+        <text wx:else style="color:red">fail</text>
+      </view>
+      <view>
+        <text>语音状态: </text>
+        <text wx:if="{{t2a_system_status==1}}" style="color:green">OK</text>
+        <text wx:elif="{{t2a_system_status==2}}" style="color:#66ccff">waiting</text>
+        <text wx:else style="color:red">fail</text>
+      </view>
+    </view>
 
-      <text>image-to-text: </text>
-      <text wx:if="{{i2t_system_status==1}}" style="color:green">OK</text>
-      <text wx:elif="{{i2t_system_status==2}}" style="color:#66ccff">waiting</text>
-      <text wx:else style="color:red">fail</text>
 
-      <text>text-to-audio: </text>
-      <text wx:if="{{t2a_system_status==1}}" style="color:green">OK</text>
-      <text wx:elif="{{t2a_system_status==2}}" style="color:#66ccff">waiting</text>
-      <text wx:else style="color:red">fail</text>
+    <view class="col-2 api-choose">
+      <text>识图接口：</text>
+      <picker bindchange="bindI2tPickerChange" value="{{i2t_api_index}}" range="{{i2t_api_conf}}" class="api-now">
+        <text>{{i2t_api_conf[i2t_api_index]}}</text>
+        <image src="img/pull.png" class="pull-img"></image>
+      </picker>
+
+      <text>语音合成：</text>
+      <picker bindchange="bindT2aPickerChange" value="{{t2a_api_index}}" range="{{t2a_api_conf}}" class="api-now">
+        <text>{{t2a_api_conf[t2a_api_index]}}</text>
+        <image src="img/pull.png" class="pull-img"></image>
+      </picker>
+    </view>
+
+    <view class="output-text">{{text}}</view>
+
+    <view class="col-2">
+      <image src="img/start.png" bindtap="clickStart" class="btn"></image>
+    </view>
+
+    <view class="col-2 btn">
+      <image src="img/pause.png" bindtap="clickStop" class="btn"></image>
+    </view>
 
   </view>
-    <picker bindchange="bindI2tPickerChange" value="{{i2t_api_index}}" range="{{i2t_api_conf}}">
-      <view class="status">
-        <text>识图接口：</text>
-        <text>{{i2t_api_conf[i2t_api_index]}}</text>
-      </view>
-    </picker>
-
-    <picker bindchange="bindT2aPickerChange" value="{{t2a_api_index}}" range="{{t2a_api_conf}}">
-      <view class="status">
-        <text>语音合成接口：</text>
-        <text>{{t2a_api_conf[t2a_api_index]}} </text>
-      </view>
-    </picker>
-
-  <view>{{text}}</view>
 </view>
 
-
-<!-- <view class="body">
-  <camera device-position="back" flash="off" binderror="error">
-  </camera>
-  <image src="{{img}}"></image>
-</view> -->
-
-<button type="primary" bindtap="clickStart" class="new-btn1">开始</button>
-
-<button type="warn" bindtap="clickStop" class="new-btn2">结束</button>
 
 <canvas canvas-id="canvas" style="width:{{cWidth}}px;height:{{cHeight}}px;position: absolute;left:-1000px;top:-1000px;"></canvas>
