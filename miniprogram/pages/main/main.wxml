@@ -8,28 +8,27 @@
   <view class="table-view">
     <view class="col-2 api-status">
       <view>
-        <text style="text-align: left">===运行信息===</text>
+        <text style="text-align: left">====运行信息====</text>
       </view>
       <view>
-        <text>相机状态: </text>
-        <text wx:if="{{camera_status==1}}" style="color:green">OK</text>
-        <text wx:elif="{{camera_status==2}}" style="color:#66ccff">waiting</text>
-        <text wx:else style="color:red">fail</text>
+        <text class="left">相机状态: </text>
+        <text wx:if="{{camera_status==1}}" class="right" style="color:green">OK</text>
+        <text wx:elif="{{camera_status==2}}" class="right" style="color:#66ccff">waiting</text>
+        <text wx:else class="right" style="color:red">fail</text>
       </view>
       <view>
-        <text>识图状态: </text>
-        <text wx:if="{{i2t_system_status==1}}" style="color:green">OK</text>
-        <text wx:elif="{{i2t_system_status==2}}" style="color:#66ccff">waiting</text>
-        <text wx:else style="color:red">fail</text>
+        <text class="left">识图状态: </text>
+        <text wx:if="{{i2t_system_status==1}}" class="right" style="color:green">OK</text>
+        <text wx:elif="{{i2t_system_status==2}}" class="right" style="color:#66ccff">waiting</text>
+        <text wx:else class="right" style="color:red">fail</text>
       </view>
       <view>
-        <text>语音状态: </text>
-        <text wx:if="{{t2a_system_status==1}}" style="color:green">OK</text>
-        <text wx:elif="{{t2a_system_status==2}}" style="color:#66ccff">waiting</text>
-        <text wx:else style="color:red">fail</text>
+        <text class="left">语音状态: </text>
+        <text wx:if="{{t2a_system_status==1}}" class="right" style="color:green">OK</text>
+        <text wx:elif="{{t2a_system_status==2}}" class="right" style="color:#66ccff">waiting</text>
+        <text wx:else class="right" style="color:red">fail</text>
       </view>
     </view>
-
 
     <view class="col-2 api-choose">
       <text>识图接口：</text>
