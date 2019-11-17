@@ -313,6 +313,7 @@ Page({
 
   clickStart() {
     console.log('strat')
+    clearInterval(this.data.interval)
 
     let that = this;
     that.proceed();
